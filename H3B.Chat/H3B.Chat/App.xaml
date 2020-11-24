@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviors="clr-namespace:H3B.Chat.Behaviors"
+             xmlns:converters="clr-namespace:H3B.Chat.Converters"
+             x:Class="H3B.Chat.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <Color x:Key="BlackColor">#000000</Color>
+            <Color x:Key="ErrorColor">#ff5252</Color>
+            <converters:FirstValidationErrorConverter x:Key="FirstValidationErrorConverter" />
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+
+            <OnPlatform x:Key="LittleSize"
+                        x:TypeArguments="x:Double">
+                <On Platform="iOS"
+                    Value="11" />
+                <On Platform="Android, UWP, WinRT, WinPhone"
+                    Value="12" />
+            </OnPlatform>
+
+            <Style x:Key="ValidationErrorLabelStyle"
+                   TargetType="{x:Type Label}">
+                <Setter Property="TextColor"
+                        Value="{StaticResource ErrorColor}" />
+                <Setter Property="FontSize"
+                        Value="{StaticResource LittleSize}" />
+            </Style>
+        </ResourceDictionary>
+        <Style x:Key="EntryStyle"
+               TargetType="{x:Type Entry}">
+            <Setter Property="behaviors:LineColorBehavior.ShouldApplyLineColor"
+                    Value="True" />
+            <Setter Property="behaviors:LineColorBehavior.LineColor"
+                    Value="{StaticResource BlackColor}" />
+        </Style>
+    </Application.Resources>
+</Application>

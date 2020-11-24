@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="H3B.Chat.Views.LoginView"
+             xmlns:viewmodels="clr-namespace:H3B.Chat.Models.ViewModels"
+             xmlns:localeffects="clr-namespace:H3B.Chat.CustomEffects"
+             xmlns:behaviors="clr-namespace:H3B.Chat.Behaviors"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    <d:ContentPage.BindingContext>
+        <viewmodels:LoginViewModel />
+    </d:ContentPage.BindingContext>
+    <AbsoluteLayout>
+
+        <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1"
+                    AbsoluteLayout.LayoutFlags="All"
+                    BackgroundColor="#053C5E">
+
+            <Frame HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   CornerRadius="30"
+                   BackgroundColor="#0A2239"
+                   HeightRequest="260">
+                <StackLayout VerticalOptions="FillAndExpand">
+
+                    <Label Text="Please enter a username"
+                           TextColor="White"
+                           FontSize="Large"
+                           VerticalOptions="Center"
+                           VerticalTextAlignment="Center"
+                           Padding="10" />
+                    <Frame BackgroundColor="White"
+                           CornerRadius="6"
+                           Padding="0"
+                           Margin="0"
+                           VerticalOptions="Center">
+                        <Entry VerticalOptions="Center"
+                               Placeholder="username"
+                               Text="{Binding UserName.Value, Mode=TwoWay}"
+                               BackgroundColor="White"
+                               Style="{StaticResource EntryStyle}">
+                            <Entry.Effects>
+                                <localeffects:RemoveEntryBorderEffect />
+                            </Entry.Effects>
+                            <Entry.Behaviors>
+                                <behaviors:EventToCommandBehavior EventName="TextChanged"
+                                                                  Command="{Binding ValidateUserNameCommand}" />
+                            </Entry.Behaviors>
+                            <Entry.Triggers>
+                                <DataTrigger TargetType="Entry"
+                                             Binding="{Binding UserName.IsValid}"
+                                             Value="False">
+                                    <Setter Property="behaviors:LineColorBehavior.LineColor"
+                                            Value="{StaticResource ErrorColor}" />
+                                </DataTrigger>
+                            </Entry.Triggers>
+                        </Entry>
+                    </Frame>
+                    <BoxView Margin="0 5"
+                             HeightRequest="2"
+                             HorizontalOptions="Fill"
+                             BackgroundColor="{StaticResource ErrorColor}"
+                             IsVisible="{Binding UserName.IsValid, Converter={StaticResource InverseBoolConverter}}" />
+                    <Label Margin="0 5" Text="{Binding UserName.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                           Style="{StaticResource ValidationErrorLabelStyle}" />
+                    <Button Text="Login"
+                            Command="{Binding LoginCommand}"
+                            VerticalOptions="EndAndExpand"
+                            BackgroundColor="#1F7A8C"></Button>
+                </StackLayout>
+            </Frame>
+        </ScrollView>
+
+
+        <StackLayout BackgroundColor="Black"
+                     Opacity="0.5"
+                     IsVisible="{Binding IsBusy}"
+                     AbsoluteLayout.LayoutBounds="0,0,1,1"
+                     AbsoluteLayout.LayoutFlags="All"></StackLayout>
+        <ActivityIndicator AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                           AbsoluteLayout.LayoutFlags="PositionProportional"
+                           Color="Aquamarine"
+                           IsRunning="{Binding IsBusy}"
+                           IsEnabled="{Binding IsBusy}"></ActivityIndicator>
+    </AbsoluteLayout>
+
+</ContentPage>
